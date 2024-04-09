@@ -1,58 +1,43 @@
-:loudspeaker: Hey there, Salesforce Commerce Cloud community!
+# Salesforce Commerce Cloud (SFCC) One-Click Purchase for PWA Kit
 
-We’re excited to hear your thoughts on your developer experience with PWA Kit and the Composable Storefront generally! Your feedback is incredibly valuable in helping us guide our roadmap and improve our offering.
+One-Click Purchase for Salesforce Commerce Cloud (SFCC) is a comprehensive package that adds essential functionalities for e-commerce. This plugin allows customers to quickly buy standard products by pressing one button int the Product Listing Page or the Product Detail Page. Customers will be able to go through a quick checkout process in a modal and buy the product they need.
 
-:clipboard: Take our quick survey here: [Survey](https://forms.gle/bUZNxQ3QKUcrjhV18) 
+## Installation
 
-Feel free to share this survey link with your colleagues, partners, or anyone who has experience with PWA Kit. Your input will help us shape the future of our development tools.
+1. The One-Click Purchase for Salesforce Commerce Cloud (SFCC) is also designed to integrate with Salesforce PWA Kit. To use this package, you need to create a local project using the React Retail App template. Run the following command to start a new project:
 
-Thank you for being a part of our community and for your continuous support! :raised_hands:
-
-# The Retail React App
-
-A project template that includes an isomorphic JavaScript storefront and [Progressive Web App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) built using [React](https://reactjs.org/) and [Express](https://expressjs.com/). It uses a modern headless architecture that enables developers to decouple front-end code from back-end systems. It leverages popular open-source libraries in the React ecosystem, such as [Chakra UI](https://chakra-ui.com/) components, [Emotion](https://emotion.sh/docs/introduction) (CSS-in-JS), [Webpack](https://webpack.js.org/), and many more.
-
-Developers don’t have to worry about the underlying infrastructure, whether they’re developing their app locally, deploying it to a [Managed Runtime](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/mrt-overview.html) environment, or testing the app live.
-
-## Requirements
-
--   Node 16.11 or later
--   npm 8 or later
-
-## Get Started
-
-To start your web server for local development, run the following command in your project directory:
-
-```bash
-npm start
+```
+npx @salesforce/pwa-kit-create-app@latest
 ```
 
-Now that the development server is running, you can open a browser and preview your commerce app:
+Remember to select the option to use the ***Retail app with your own Commerce Cloud instance*** and choose '**Yes**' when asked if you want to take advantage of template extensibility. For additional information on creating and using the React Retail application, please refer to the documentation page of [Salesforce Developer](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/getting-started.html)
 
--   Go to http://localhost:3000/
+2. PWA Kit requires you to set up a public SLAS client ID for your PWA Kit application. For this step, follow the instructions in the guide Salesforce Set Up API Access [Set up Salesforce API access](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/setting-up-api-access.html)
 
-## Localization
+3. The modifications in the PWA Kit apply to the extensibility of the template. If you have enabled extensibility, as indicated in the first step of the prerequisites section, your project should be ready to use the base template for this integration. To install the base template, run the following command:
 
-See the [Localization README.md](./translations/README.md) for important setup instructions for localization.
+```
+npm i @appspringtechsas/sfcc-one-click-purchase
+```
 
-## Configuration Files
+4. To make your project extensible from SFCC One-Click Purchase, you need to go to your **package.json** file and there, you will find a section called **ccExtensibility**. Modify the value of the ***extends*** property, replace the value with *@appspringtechsas/sfcc-one-click-purchase* and save the changes.
 
-The Retail React App's configuration files are located in the `app/config` folder. For more details, see [Configuration Files](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/configuration-options.html) in the documentation.
+6. The Routes file also needs modifications, as the routes are imported from Salesforce Retail React App by default. In all imports, replace the parts containing @salesforce/retail-react-app/ with @appspringtechsas/sfcc-one-click-purchase/. This will cause the routes to be imported from SFCC One-Click Purchase template
 
-## Documentation
+7. After modifying the **package.json** of your project, you must go to **config/default.js** and add the following entry in proxyConfigs:
 
-The full documentation for PWA Kit and Managed Runtime is hosted on the [Salesforce Developers](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/overview) portal.
+```
+    {
+        host: '<Your-Realm-ID>.dx.commercecloud.salesforce.com',
+        path: 'controller'
+    }
+```
 
-### Useful Links:
+> [!NOTE]
+> This new proxy configuration is required for calls to the SFRA driver provided by the package
 
--   [Get Started](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/getting-started.html)
--   [Skills for Success](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/skills-for-success.html)
--   [Set Up API Access](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/setting-up-api-access.html)
--   [Configuration Options](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/configuration-options.html)
--   [Proxy Requests](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/proxying-requests.html)
--   [Push and Deploy Bundles](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/pushing-and-deploying-bundles.html)
--   [The Retail React App](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/retail-react-app.html)
--   [Rendering](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/rendering.html)
--   [Routing](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/routing.html)
--   [Phased Headless Rollouts](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/phased-headless-rollouts.html)
--   [Launch Your Storefront](https://developer.salesforce.com/docs/commerce/pwa-kit-managed-runtime/guide/launching-your-storefront.html)
+8. Execute the commands ``npm i`` and then execute ``npm run build``
+
+9. An SFRA Plugin is also required for the integration package to work. The plugin is located inside the **sfra-cartridges/** folder. For more information on how to install the *one_click_purchase* plugin, please refer to the README file of the cartridge
+
+10. After following the steps, you should be ready to use SFCC One-Click Purchase
